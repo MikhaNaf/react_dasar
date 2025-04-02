@@ -1,6 +1,7 @@
 import NoteForm from "./NoteForm";
 import NoteList from "./NoteList";
 import { useReducer } from "react";
+import { NotesContext, NotesDispatchContext } from "./NotesContext";
 
 
 let id = 0 
@@ -32,30 +33,17 @@ function notesReducer(notes, action){
 
 export default function NoteApp(){
     const [notes, dispatch] = useReducer(notesReducer, intialNotes)
-    function handleAddNote(text) {
-        dispatch({
-            type: "ADD_NOTE",
-            text: text
-        })
-    }
-    function handleChangeNote(note){
-        dispatch({
-            ...note,
-            type: "CHANGE_NOTE"
-        })
-    }
-    function handleDelateNote(note){
-        dispatch({
-            type: "DELATE_NOTE",
-            id: note.id
-        })
-    }
-    
+
     return(
         <div>
-            <h1>Note App</h1>
-            <NoteForm onAddNote={handleAddNote}/>
-            <NoteList notes={notes} onChange={handleChangeNote} onDelate={handleDelateNote}/>
+            
+            <NotesContext.Provider value={notes}>
+                <NotesDispatchContext value={dispatch}>
+                <h1>Note App</h1>
+                <NoteForm/>
+                <NoteList/>
+                </NotesDispatchContext>
+            </NotesContext.Provider>
 
         </div>
     )
